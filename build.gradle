@@ -17,3 +17,12 @@ allprojects {
         jcenter()
     }
 }
+
+task runLocalServer(dependsOn: ':backend:appengineRun')
+task runDeviceTests(dependsOn: ':app:connectedCheck')
+task shutdownLocalServer(dependsOn: ':backend:appengineStop')
+
+task functionalTest(dependsOn: ['runLocalServer', 'runDeviceTests', 'shutdownLocalServer'])
+
+runDeviceTests.shouldRunAfter runLocalServer
+shutdownLocalServer.mustRunAfter runDeviceTests

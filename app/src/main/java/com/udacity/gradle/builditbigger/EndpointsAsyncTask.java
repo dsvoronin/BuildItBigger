@@ -2,6 +2,7 @@ package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -19,9 +20,11 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     private static JokesApi myApiService = null;
     private final Context context;
+
+    @Nullable
     private final ProgressBar progressBar;
 
-    EndpointsAsyncTask(Context context, ProgressBar progressBar) {
+    EndpointsAsyncTask(Context context, @Nullable ProgressBar progressBar) {
         this.context = context;
         this.progressBar = progressBar;
 
@@ -47,7 +50,9 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -62,7 +67,9 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        progressBar.setVisibility(View.GONE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
 
         context.startActivity(JokeActivity.showJokeActivity(context, result));
     }
