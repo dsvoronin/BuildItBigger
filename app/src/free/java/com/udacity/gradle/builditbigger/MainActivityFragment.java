@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -38,6 +39,7 @@ public class MainActivityFragment extends Fragment {
         mAdView.loadAd(adRequest);
 
         final Activity activity = getActivity();
+        final ProgressBar spinner = (ProgressBar) root.findViewById(R.id.progressBar);
 
         mInterstitialAd = new InterstitialAd(activity);
         mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
@@ -46,7 +48,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onAdClosed() {
                 requestNewInterstitial();
-                MainActivity.tellJoke(activity);
+                MainActivity.tellJoke(activity, spinner);
             }
         });
 
@@ -60,7 +62,7 @@ public class MainActivityFragment extends Fragment {
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 } else {
-                    MainActivity.tellJoke(v.getContext());
+                    MainActivity.tellJoke(v.getContext(), spinner);
                 }
             }
         });

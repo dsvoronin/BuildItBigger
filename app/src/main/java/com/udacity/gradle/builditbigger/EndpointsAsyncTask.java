@@ -3,6 +3,8 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -17,9 +19,11 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     private static JokesApi myApiService = null;
     private final Context context;
+    private final ProgressBar progressBar;
 
-    EndpointsAsyncTask(Context context) {
+    EndpointsAsyncTask(Context context, ProgressBar progressBar) {
         this.context = context;
+        this.progressBar = progressBar;
 
         if (myApiService == null) {  // Only do this once
             JokesApi.Builder builder = new JokesApi.Builder(AndroidHttp.newCompatibleTransport(),
@@ -41,6 +45,12 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected String doInBackground(Void... params) {
         try {
             return myApiService.getJoke().execute().getContents();
@@ -52,6 +62,8 @@ class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        progressBar.setVisibility(View.GONE);
+
         context.startActivity(JokeActivity.showJokeActivity(context, result));
     }
 }
