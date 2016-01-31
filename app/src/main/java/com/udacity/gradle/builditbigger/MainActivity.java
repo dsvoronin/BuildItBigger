@@ -6,21 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.udacity.gradle.builditbigger.lib.JokeActivity;
-
 
 public class MainActivity extends ActionBarActivity {
-
-    private JokesSource jokesSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        jokesSource = new JokesSourceImpl();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,6 +38,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
-        startActivity(JokeActivity.showJokeActivity(this, jokesSource.getRandomJoke()));
+        new EndpointsAsyncTask(this).execute();
     }
 }
