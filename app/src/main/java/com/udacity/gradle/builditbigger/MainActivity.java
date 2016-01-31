@@ -5,7 +5,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import com.udacity.gradle.builditbigger.lib.JokeActivity;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -44,8 +45,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
-        Toast.makeText(this, jokesSource.getRandomJoke(), Toast.LENGTH_SHORT).show();
+        startActivity(JokeActivity.showJokeActivity(this, jokesSource.getRandomJoke()));
     }
-
-
 }
