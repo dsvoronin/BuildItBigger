@@ -18,11 +18,19 @@ allprojects {
     }
 }
 
-task runLocalServer(dependsOn: ':backend:appengineRun')
-task runDeviceTests(dependsOn: ':app:connectedCheck')
-task shutdownLocalServer(dependsOn: ':backend:appengineStop')
+task functionalTest(dependsOn: ['startServer', 'executeTests', 'stopServer']) {
+    evaluationDependsOn ':backend'
+    project(':backend') {
+        appengine {
+            daemon true
+        }
+    }
+}
 
-task functionalTest(dependsOn: ['runLocalServer', 'runDeviceTests', 'shutdownLocalServer'])
+task stopServer(dependsOn: ['executeTests', ':backend:appengineStop'])
+stopServer.mustRunAfter('executeTests')
 
-runDeviceTests.shouldRunAfter runLocalServer
-shutdownLocalServer.mustRunAfter runDeviceTests
+task executeTests(dependsOn: ['startServer', ':app:connectedAndroidTest'])
+executeTests.mustRunAfter('startServer')
+
+task startServer(dependsOn: ':backend:appengineRun')
